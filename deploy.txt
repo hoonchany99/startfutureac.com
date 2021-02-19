@@ -1,0 +1,31 @@
+
+
+1. home/bitnami/django-test 폴더 생성
+2. virtualenv 생성, 활성화
+3. django, gunicorn 설치
+4. python manage.py collectstatic
+
+https://wikidocs.net/6601
+
+4. 80번 포트 쓰고있다고 나오면, 
+sudo netstat -tulpn 한 후 80번 쓰고있는애 찾아서 sudo kill pid 하면됨
+
+5. 빨리 반영안될때는 
+sudo systemctl restart gunicorn
+sudo systemctl restart nginx
+하면 서버재부팅되서 바로됨.
+
+6. https는 key 받거나 letsencrypt 통해 얻으면 됨.
+https://lightsail.aws.amazon.com/ls/docs/en_us/articles/amazon-lightsail-using-lets-encrypt-certificates-with-wordpress#link-the-lets-encrypt-certificate-files-in-the-apache-directory-wordpress
+이거따라서
+
+그다음에 nginx available-site에서 서버 프로그래밍 하면 됨.(따로첨부)
+
+7. 인증키 자동갱신 
+
+sudo crontab -e
+
+30 9 10 * * /usr/bin/letsencrypt renew >> /var/log/le-renew.log
+35 9 10 * * /bin/systemctl reload nginx
+
+쓰고 저장.
